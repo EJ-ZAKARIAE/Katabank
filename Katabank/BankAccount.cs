@@ -23,7 +23,6 @@ namespace Katabank
             }
         }
 
-        public AccountReporting accountReporting = new AccountReporting();
         public Client client { get; set; }
 
         private readonly List<Transaction> allTransactions = new List<Transaction>();
