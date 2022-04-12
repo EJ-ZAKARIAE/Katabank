@@ -9,12 +9,16 @@ namespace Katabank.Model
     public class Client
     {
         public string Owner { get; set; }
-        private static int accountNumberSeed = 1234567890;
-        public string Number { get; }
-        public Client(string name)
+        public int Number { get; }
+        public Client(string name, int number)
         {
-            Number = accountNumberSeed.ToString();
-            accountNumberSeed++;
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+
+            if (number == 0)
+                throw new ArgumentException("number");
+
+            Number = number;
 
             Owner = name;
         }

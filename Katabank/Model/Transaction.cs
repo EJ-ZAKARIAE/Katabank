@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Katabank.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,53 +15,14 @@ namespace Katabank
 
         public Transaction(decimal amount, DateTime date, string note)
         {
-            if (amount <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount), "Amount of deposit must be positive");
-            }
-
             Amount = amount;
-
-            try
-            {
-                IFormatProvider culture = new System.Globalization.CultureInfo("fr-FR", true);
-
-                Date = System.Convert.ToDateTime(date, culture);
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("This date is not valide !");
-            }
+            Date = date;
+            if (!Helper.DateTimeValidator.ValidateDate(date))
+                throw new InvalidDateException("This date is not valide !");
 
             Notes = note;
         }
 
-        public Transaction(decimal amount, DateTime date, string note, decimal balance)
-        {
-            if (amount <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(amount), "Amount of withdrawal must be positive");
-            }
-            if (balance - amount < 0)
-            {
-                throw new InvalidOperationException("Not sufficient funds for this withdrawal");
-            }
-
-            Amount = - amount;
-
-            try
-            {
-                IFormatProvider culture = new System.Globalization.CultureInfo("fr-FR", true);
-
-                Date = System.Convert.ToDateTime(date, culture);
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException("This date is not valide !");
-            }
-
-            Notes = note;
-        }
         public string ToString(decimal balance)
         {
             return $"{Date.ToShortDateString()}\t{Amount}\t{balance}\t{Notes}";
